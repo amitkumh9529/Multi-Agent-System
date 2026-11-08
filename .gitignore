@@ -1,0 +1,11 @@
+.idea
+.vscode
+app/.env
+*.pyc
+__pycache__/
+*.pyo
+*.py[cod]
+.http
+frontend/node_modules
+mockup
+uploaded_data
