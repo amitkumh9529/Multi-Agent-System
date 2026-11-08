@@ -1,0 +1,47 @@
+
+services:
+  vectordb:
+    container_name: postgresqlforvector
+    image: pgvector/pgvector:pg18-trixie
+    environment:
+      POSTGRES_DB: mydatabase
+      POSTGRES_USER: myuser
+      POSTGRES_PASSWORD: mypassword
+    restart: always
+    ports:
+      - '54320:5432'
+    volumes:
+      - pgdatabase_volume:/var/lib/postgresql
+
+  app:
+    container_name: mas-platform-app
+    build:
+      context: ./app
+      dockerfile: Dockerfile
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./app:/app/app
+    env_file:
+      - ./app/.env  # Carica le variabili d'ambiente da .env (se esiste)
+    restart: unless-stopped
+
+  frontend:
+    container_name: mas-platform-frontend
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./frontend:/app
+      - /app/node_modules # Evita che le dipendenze vengano sovrascritte dal bind mount locale
+    environment:
+      - VITE_BACKEND_URL=http://app:8000
+      - CHOKIDAR_USEPOLLING=true # Fissa l'hot reload su Windows con volumi docker
+    restart: unless-stopped
+    depends_on:
+      - app
+
+volumes:
+  pgdatabase_volume:
