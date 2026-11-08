@@ -1,0 +1,9 @@
+### Test SSE Chat Endpoint
+POST http://localhost:8001/api/v1/chat/1
+Content-Type: application/json
+Accept: text/event-stream
+
+{
+  "message": "Palermo",
+  "thread_id": "test-session-1"
+}

@@ -1,0 +1,1 @@
+# package per la logica di accesso al database (indipendentemente dal tipo di dati)
